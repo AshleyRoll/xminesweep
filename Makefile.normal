@@ -1,0 +1,22 @@
+# Makefile for xminesweep version 3.0
+#
+# If your system is based on system V add -DSYSTEM_V to the DEFS
+#
+
+DEFS           = -DCHEAT_OK 
+CFLAGS         = -O $(DEFS)
+CC             = cc
+LIBS = -lX11 -lXaw -lXt -lXmu -lXext
+OBJS = xminesweep.o misc.o callbacks.o
+SRCS = xminesweep.c misc.c callbakcs.c
+
+xminesweep: $(OBJS)
+	$(CC) -o xminesweep $(OBJS) $(DEFS) $(LIBS)
+
+clean:
+	rm -f core  *.o *~ #*
+
+allclean:
+	rm xminesweep
+	rm -f core  *.o *~ #*
+

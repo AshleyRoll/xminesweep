@@ -1,0 +1,104 @@
+.TH XMINESWEEP 1 "11 November 1992"
+.SH NAME
+xminesweep \- A mine-sweeper game.
+.SH SYNOPSIS
+.B xminesweep
+[
+.I toolkit options
+]
+[
+.I -mines <num> 
+]
+[
+.I -ncH <numHigh>
+]
+[
+.I -ncW <numWide>
+]
+[
+.I -sound
+]
+[
+.I -nosound
+]
+
+where 
+.I <num>
+is the number of mines in the playing field.
+.I <numHigh>
+is the number of squares high.
+.I <numWide> 
+is the number of squares wide.
+.I -sound
+turns sound on.
+.I -nosound
+turns sound off.
+.SH DESCRIPTION
+.LP
+.B xminesweep 
+will start up with a window full of cells. clicking on one with the 
+left mouse button will 'expose' it (and if there is a mine there you 
+will die!). Clicking in a cell with the right mouse button will either
+mark or unmark it as a 'Mine'. If you click in the cell with the middle 
+mouse button you can toggle a 'questioned' image, you can expose and mark
+a questioned cell. There is also a fast expose feature, clicking on an 
+exposed number with the left mouse button and holding down the shift key
+will, if there are the correct number of cells marked, expose all unmarked
+squares. Be warned the if you mark the wrong cells you could expose a mine
+and die!
+
+The object is to mark all the mines in the playing field. When a 'Cell' is 
+exposed, and it is not a mine, it will contain a number \- this number is the
+number of mines in the eight Cells around it (blank = zero).
+
+If you miss a mine (mark a square that is not a mine), and then the mine count
+gets to zero, you will loose because you got one wrong!.
+
+.SH OTHER CONTROLS
+There are two buttons in the top part of the window, one will make 
+.B xminesweep
+exit, the other will restart the current game (and rearrange the mines).
+
+There is also a text box which displays the number of mines in the playing
+field, you can change the value in this and then press [Enter] and the game 
+will restart with the new number of mines. (nothing will happen of the number
+is the same). There is a limited range for the number of mines, it is between
+1 and (DEFAULT_NUM_MINES/3). 
+
+When you die, all the Cells will be exposed, any mines that you marked will
+be shown with the marked image, any Cells that you marked but are not mines
+will be shown with the wrong-mark image, and any unmarked mines will be shown
+as mines.
+
+There is a cheat option that can be set at compile time. It will give you a
+good start by finding a cell with no mines surounding it an pretend that you
+clicked on it to expose it. If you keep doing this you will get all the cells
+with no mines around exposed and a realy good start. The default key sequence
+to use this cheat is "<Control> <Shift> C", where the <Control> and <Shift>
+keys are held down and the C key is pressed twice. (like a double mouse click).
+This must be done with the mouse over one of the cells.
+
+.B xminesweep
+will take all the normal Athena Widget 
+.I toolkit options
+it is given. 
+
+.SH RESOURCES
+
+.B xminesweep
+will accept these special resources:
+
+XMinesweep*mines:
+
+XMinesweep*numCellsHigh:
+
+XMinesweep*numCellsWide:
+
+XMinesweep*sound:  [True or False]
+
+They correspond to the command line options -mines, -ncH, -ncW and -[no]sound.
+
+.SH AUTHOR
+.B Ashley Roll
+-- aroll@gucis.cit.gu.edu.au
+

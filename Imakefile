@@ -1,0 +1,13 @@
+# Imakefile for xminesweep version 3.0
+#
+# If your system is based on System V then -DSYSTEM_V to the EXTRA_DEFINES
+#
+
+  EXTRA_DEFINES = -DCHEAT_OK 
+        DEPLIBS = XawClientDepLibs
+LOCAL_LIBRARIES = XawClientLibs
+           SRCS = xminesweep.c callbacks.c misc.c
+           OBJS = $(SRCS:.c=.o)
+
+ComplexProgramTarget(xminesweep)
+

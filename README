@@ -1,0 +1,74 @@
+This is the README file for xminesweep version 3.1         By Ashley Roll
+                                                              26 Jan 1993
+____________________________________________________________________________
+
+
+xminesweep is a game in which you have to mark all the mines in a playing 
+field, you have to work out where they are from information about the 
+number of mines around a Cell in the playing field. It is an addictive mind 
+game ;)
+
+For information on how to use this porgram consult the man page 
+(xminesweep.man).
+
+MAKING THE PROGRAM.
+
+First you must decide if you want to allow the cheat mode (Find and expose a 
+square with no mines around it - useful for starting a game) and 
+if you *DO NOT* want to use it then you must edit the Imakefile or the 
+Makefile.normal depending on which one you will be using. You must remove the 
+line that has -DCHEAT_OK on it.
+
+If you are going to use the cheat mode then you can change the translation 
+that triggers the cheatmode. it is in the file xminesweep.c. (look for a 
+translation that calls Cheat_Toggle() ). At the moment the key sequence is:
+
+Ctrl-Shit-C (but you must press C twice like a double click (or hold it down)).
+
+If your system is based on system V, then you will have to edit the 
+Imakefile or the Makefile.normal (which ever you are going to use) and
+add the -DSYSTEM_V define to the list of definations.
+
+if you can use Imake, then:
+
+xmkmf
+make install
+make install.man
+
+otherwise:
+
+mv Makefile.normal Makefile
+make
+
+you will then have to move the executable and the man page to the appropriate
+directories manually.
+____________________________________________________________________________
+
+Once you have installed the program and the manual page you can delete all the
+other files (the execuatable is fully selfcontained and doesn't require any
+data files).
+
+____________________________________________________________________________
+MACHINES:
+
+This program has been successfully compiled on several SUN series 4 machines 
+running X11R5.
+
+____________________________________________________________________________
+Known BUGS:
+
+There have been problems with the program on a SUN 3/60, where no matter where
+the mouse is clicked to reveal a square, the bottom right square is exposed.
+I have a feeling that this is something to do with the X libs.
+
+____________________________________________________________________________
+Have Fun.
+
+                              __   |\
+  - - -- ---- ------------  _/  \__| \.  ------------------------ ---- -- - -
+  Ashley Roll              /           \                   Research Scientist
+  Architecture Unit       |     __     *|  <-- Brisbane          DSTC Pty Ltd
+  ash@dstc.edu.au          \___/  \    /   DoD #1722    phone: +61 7 365 4310
+  http://www.dstc.edu.au/          `--'    CB250T, Z1100  fax: +61 7 365 4311
+  - - -- ---- ---------------------  V  ------------------------- ---- -- - -
+

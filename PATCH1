@@ -1,0 +1,192 @@
+From ralf@prl.philips.nl Sat Jun  3 06:57:06 1995
+Received: from kurango.cit.gu.edu.au (kurango.cit.gu.edu.au [132.234.5.1]) by trapdoor.dstc.edu.au (8.6.9/8.6.9) with SMTP id GAA00978 for <ash@dstc.edu.au>; Sat, 3 Jun 1995 06:57:04 +1000
+From: ralf@prl.philips.nl
+Received: from citadel.cit.gu.edu.au by kurango.cit.gu.edu.au with SMTP id AA18464
+  (5.67b/IDA-1.5 for <ash@kurango.cit.gu.edu.au>); Sat, 3 Jun 1995 06:59:21 +1000
+Received: from relay.philips.nl by citadel.cit.gu.edu.au with SMTP id AA22398
+  (5.67b/IDA-1.5 for <A.Roll@cit.gu.edu.au>); Sat, 3 Jun 1995 06:58:50 +1000
+Received: from prl.philips.nl ([130.144.1.112]) by relay.philips.nl (8.6.9/8.6.9-950414) with SMTP id WAA09168 for <A.Roll@cit.gu.edu.au>; Fri, 2 Jun 1995 22:56:48 +0200
+Received: by prl.philips.nl; Fri, 2 Jun 1995 22:56:46 +0200
+Received: by iris14.prl.philips.nl; Fri, 2 Jun 95 22:56:44 +0200
+Date: Fri, 2 Jun 95 22:56:44 +0200
+Message-Id: <9506022056.AA07874@iris14.prl.philips.nl>
+To: A.Roll@cit.gu.edu.au
+Subject: minesweep 3.0 w/ colors
+X-Mailer: GNU Emacs 19.27
+Status: RO
+
+BFI approach to add colors to the number fields.  Not very
+sophisticated, but it works (even on B/W)...
+Use it or loose it ;-)
+
+Regards
+R'
+----
+Ralf Fassel                          ralf@prl.philips.nl
+Institute for Perception Research IPO       Eindhoven NL
+#     Backups? We don' *NEED* no steenking backups.    #
+
+diff -c xminesweep3.0/misc.c xminesweep3.1/misc.c
+*** xminesweep3.0/misc.c	Thu Jun 23 02:11:43 1994
+--- xminesweep3.1/misc.c	Fri Jun  2 22:15:38 1995
+***************
+*** 320,354 ****
+        break;
+  
+      case 1:
+!       SETBITMAP(x,y,b1);
+        break;
+  
+      case 2:
+!       SETBITMAP(x,y,b2);
+        break;
+  
+      case 3:
+!       SETBITMAP(x,y,b3);
+        break;
+  
+      case 4:
+!       SETBITMAP(x,y,b4);
+        break;
+  
+      case 5:
+!       SETBITMAP(x,y,b5);
+        break;
+  
+      case 6:
+!       SETBITMAP(x,y,b6);
+        break;
+  
+      case 7:
+!       SETBITMAP(x,y,b7);
+        break;
+  
+      case 8:
+!       SETBITMAP(x,y,b8);
+        break;
+  
+  
+--- 320,354 ----
+        break;
+  
+      case 1:
+! 	  SETCBITMAP(x,y,b1,cgc[0]);
+        break;
+  
+      case 2:
+!       SETCBITMAP(x,y,b2,cgc[1]);
+        break;
+  
+      case 3:
+!       SETCBITMAP(x,y,b3,cgc[2]);
+        break;
+  
+      case 4:
+!       SETCBITMAP(x,y,b4,cgc[3]);
+        break;
+  
+      case 5:
+!       SETCBITMAP(x,y,b5,cgc[4]);
+        break;
+  
+      case 6:
+!       SETCBITMAP(x,y,b6,cgc[5]);
+        break;
+  
+      case 7:
+!       SETCBITMAP(x,y,b7,cgc[6]);
+        break;
+  
+      case 8:
+!       SETCBITMAP(x,y,b8,cgc[7]);
+        break;
+  
+  
+diff -c xminesweep3.0/xminesweep.c xminesweep3.1/xminesweep.c
+*** xminesweep3.0/xminesweep.c	Wed Sep 21 03:40:56 1994
+--- xminesweep3.1/xminesweep.c	Fri Jun  2 22:42:18 1995
+***************
+*** 124,129 ****
+--- 124,135 ----
+  	 (Cardinal) OFFSETOF(Config,sound), XtRImmediate, 
+  	 (caddr_t) False},
+  };
++ 
++ 
++ /* colors */
++ static char *colors[] = {"blue","magenta","red","green","cyan","black","grey50","brown"};
++ /* yellow is too little contrast to background, use grey50 instead */
++ 
+  /* -------------------------- */
+  
+  
+***************
+*** 264,270 ****
+      gcv.foreground = WhitePixelOfScreen(XtScreen(toplevel));
+      gcv.background = BlackPixelOfScreen(XtScreen(toplevel));
+      igc = XCreateGC(disp,DefaultRootWindow(XtDisplay(toplevel)),mask,&gcv);
+!   }
+  
+    init_world();
+    show_mines_left();
+--- 270,297 ----
+      gcv.foreground = WhitePixelOfScreen(XtScreen(toplevel));
+      gcv.background = BlackPixelOfScreen(XtScreen(toplevel));
+      igc = XCreateGC(disp,DefaultRootWindow(XtDisplay(toplevel)),mask,&gcv);
+! 
+!     /* try colors for the num boards */
+!   switch (DefaultVisualOfScreen(XtScreen(toplevel))->class)
+!   {
+! 	  int loop;
+! 	  XColor def, get;
+!   case StaticGray:
+!   case GrayScale:
+! 	  cgc[0] = cgc[1] = cgc[2] = cgc[3] = cgc[4] = cgc[5] = cgc[6] = cgc[7] = gc;
+! 	  break;
+!   default:
+! 	  for (loop=0; loop < 8; loop++)
+! 	  {
+! 		  XLookupColor(disp,DefaultColormapOfScreen(XtScreen(toplevel)),colors[loop],&def,&get);
+! 		  if(XAllocColor(disp,DefaultColormapOfScreen(XtScreen(toplevel)), &get))
+! 			  gcv.foreground = get.pixel;
+! 		  else
+! 			  gcv.foreground = BlackPixelOfScreen(XtScreen(toplevel));
+! 		  gcv.background = WhitePixelOfScreen(XtScreen(toplevel));
+! 		  cgc[loop] = XCreateGC(disp,DefaultRootWindow(XtDisplay(toplevel)),mask,&gcv);
+! 	  }
+!   }}
+  
+    init_world();
+    show_mines_left();
+diff -c xminesweep3.0/xminesweep.h xminesweep3.1/xminesweep.h
+*** xminesweep3.0/xminesweep.h	Thu Jun 23 02:33:07 1994
+--- xminesweep3.1/xminesweep.h	Fri Jun  2 22:22:40 1995
+***************
+*** 83,88 ****
+--- 83,89 ----
+  ext char num_mines_string[5];
+  ext Display *disp;
+  ext GC gc,igc;
++ ext GC cgc[8];
+  ext Window corewwin;
+  ext int do_expose_zeros;
+  ext int dead,timer_started;
+***************
+*** 134,139 ****
+--- 135,143 ----
+  
+  #define RANDOM(x) (my_rand() % x)
+  #define SETBITMAP(w,h,b) XCopyPlane(disp,b,corewwin,gc,0,0,21,21,World(w,h,x), \
++                                  World(w,h,y), (unsigned long)1)
++ 
++ #define SETCBITMAP(w,h,b,c) XCopyPlane(disp,b,corewwin,c,0,0,21,21,World(w,h,x), \
+                                   World(w,h,y), (unsigned long)1)
+  
+  #define INVSETBITMAP(w,h,b) XCopyPlane(disp,b,corewwin,igc,0,0,21,21, \
+
+
+--WAA09100.802126481/relay.philips.nl--
+
+
+
+
